@@ -3,6 +3,8 @@
  */
 
 #include "poObject.h"
+#include "poTextBox.h"
+
 
 class graphicsProgrammingApp : public poObject {
 public:
@@ -26,6 +28,8 @@ public:
     virtual void drawGrid2();
     int X;
     int Y;
+    int initialX;
+    int initialY;
     
     virtual void drawGrid3();
     
@@ -36,6 +40,8 @@ public:
     int mouseX, mouseY;
     
     int checkerboard;
+    
+    poTextBox* B;
     
 };
 

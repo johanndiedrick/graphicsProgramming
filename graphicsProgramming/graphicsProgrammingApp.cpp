@@ -7,9 +7,9 @@
 #include "poCamera.h"
 #include "poShapeBasics2D.h"
 #include "poTextBoxLayout.h"
-#include "poTextBox.h"
 
 using namespace std;
+#include <iostream>
 
 // APP CONSTRUCTOR. Create all objects here.
 graphicsProgrammingApp::graphicsProgrammingApp() {
@@ -25,32 +25,34 @@ graphicsProgrammingApp::graphicsProgrammingApp() {
     mouseX = 0;
     mouseY = 0;
     
-    //
-    stringstream s;
-    s << "x:" << mouseX << "y:" << mouseY;
+    
     
     //w,h variables for drawGrid1 function
     W = 10;
     H=10;
     
     //x,y variables for drawGrid2 function
-    X = 10;
-    Y = 10;
+    X = 1;
+    Y = 1;
+    initialX = 0;
+    initialY = 0;
     
     //switch variable for checkerboard colors
     checkerboard=1;
     
+    //stringstream for passing mouse position to textbox
+    stringstream s;
+    s << "x: " << X << " y: " << Y;
     
-    
-    poTextBox* B = new poTextBox(280, 120);
+    B = new poTextBox(280, 120);
 	B->setText(s.str());	// Set the text
 	B->setTextAlignment(PO_ALIGN_TOP_RIGHT);			// Set the text alignment within the text box
 	B->setFont( poGetFont("Helvetica", "Bold") );		// Set the font to Helvetica Bold
 	B->setTextSize(22);									// Set the text size
 	B->textColor = poColor::blue;						// Set the text color
 	B->doLayout();										// Always call doLayout() after you make any change
-	B->drawBounds = true;								// Show the bounds of the text box
-	B->position.set(getWindowWidth()-300, 100, 0);
+	B->drawBounds = false;								// Show the bounds of the text box
+	B->position.set(getWindowWidth()-300, 50, 0);
 	addChild( B );
 
     
@@ -78,9 +80,10 @@ void graphicsProgrammingApp::draw() {
     
     else drawGrid2();
     
-    //printf("%d \n", mouseX);
-    //printf("%d \n", mouseY);
-    printf("%d \n", keyDown);
+    printf("%d \n", mouseX);
+    printf("%d \n", mouseY);
+    //printf("%d \n", keyDown);
+    
 }
 
 // EVENT HANDLER. Called when events happen. Respond to events here.
@@ -129,26 +132,47 @@ void graphicsProgrammingApp::drawGrid2(){
     
     if (keyDown == 'w'){
         Y = Y - 1;
-        keyDown*='2';
+        initialY = initialY -1;
+        keyDown='2';
     }
     
     if (keyDown == 's'){
         Y = Y + 1;
-        keyDown*='2';
+        initialY = initialY + 1;
+        keyDown='2';
     }
     
     if (keyDown == 'a'){
         X = X - 1;
-        keyDown*='2';
+        initialX = initialX - 1;
+        keyDown='2';
     }
     
     if (keyDown == 'd'){
         X = X + 1;
-        keyDown*='2';
+        initialX = initialX + 1;
+        keyDown='2';
     }
     
-    for (int y=0; y<Y;y++){
-        for (int x=0; x<X; x++){
+    stringstream s;
+    s << "x: " << X << " y: " << Y;
+    
+	B->setText(s.str());	// Set the text
+	B->doLayout();
+    
+    
+    
+    for (int y=0; y<H;y++){
+        for (int x=0; x<W; x++){
+            
+            
+                po::setColor(poColor::white);
+            po::drawFilledRect(x*30, y*30, 10, 10);}
+    }
+
+    
+    for (int y = initialY; y<Y;y++){
+        for (int x = initialX; x<X; x++){
             po::setColor(poColor::red);
             po::drawFilledRect(x*30, y*30, 10, 10);}
     }
